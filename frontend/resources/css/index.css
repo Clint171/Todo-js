@@ -142,10 +142,17 @@ fieldset{
     width: 80%;
 }
 .saving-popup{
+    background-color: rgb(253, 223, 183);
     position: fixed;
-    top: 2em;
-    left: 20%;
-    right: 20%;
-    width: 60%;
-    background-color: aliceblue;
+    top: 0em;
+    left: 30%;
+    right: 30%;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.loading-animation{
 }
