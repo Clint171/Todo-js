@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -16,64 +17,32 @@
     </div>
     <div class="navbar hidden" id="navbar">
         <span onclick="showScreen('newTaskScreen')">Add Task</span>
-        <span>View Pending Tasks</span>
-        <span>View Completed Tasks</span>
+        <span onclick="displayTasks()">View All Tasks</span>
+        <span onclick="displayPendingTasks()">View Pending Tasks</span>
+        <span onclick="displayCompletedTasks()">View Completed Tasks</span>
         <span>My Profile</span>
         <span>Settings</span>
         <button onclick="hideNav()">Close</button>
     </div>
-    <div class="saving-popup">
+    <div class="saving-popup" id="popup">
         <iconify-icon icon="line-md:loading-loop" width="100" height="100"></iconify-icon>
     </div>
-    <div class="container">
-        <div class="item">
-            <h2 class="item-title item-title-completed"><span>Install SWI PROLOG</span>            <svg class ="item-check item-check-clicked" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14m-9 12l-4-4l1.41-1.42L10 14.17l6.59-6.59L18 9"/></svg>
-            </h2>
-            <p class="item-description"><span>October 25</span><span>10:00</span></p>
-        </div>
-        <div class="item">
-            <h2 class="item-title">Play Football</h2>
-            <p class="item-description"><span>October 25</span><span>10:00</span></p>
-        </div>
-        <div class="item">
-            <h2 class="item-title">Install Visual Studio</h2>
-            <p class="item-description"><span>October 25</span><span>10:00</span></p>
-        </div>
-        <div class="item">
-            <h2 class="item-title">Read for CATS</h2>
-            <p class="item-description"><span>October 25</span><span>10:00</span></p>
-        </div>
-        <div class="item">
-            <h2 class="item-title">Finish Todo Project</h2>
-            <p class="item-description"><span>October 25</span><span>10:00</span></p>
-        </div>
-        <div class="item">
-            <h2 class="item-title">Install SWI PROLOG</h2>
-            <p class="item-description"><span>October 25</span><span>10:00</span></p>
-        </div>
-        <div class="item">
-            <h2 class="item-title">Install SWI PROLOG</h2>
-            <p class="item-description"><span>October 25</span><span>10:00</span></p>
-        </div>
-        <div class="item">
-            <h2 class="item-title">Install SWI PROLOG</h2>
-            <p class="item-description"><span>October 25</span><span>10:00</span></p>
-        </div>
+    <div class="container" id="container">
     </div>
     <div class="screen hidden" id="newTaskScreen">
         <h2>New Task</h2>
-        <form action="/task" method="post">
+        <form id="newTaskForm" action="/" method="post">
             <fieldset>
                 <legend>Task Title</legend>
-                <input type="text" name="title" placeholder="Title" required>
+                <input type="text" id="title" name="title" placeholder="Title" required>
             </fieldset>
             <fieldset>
                 <legend>Task Description</legend>
-            <textarea name="description" placeholder="Description" required></textarea>
+            <textarea id="description" name="description" placeholder="Description" required></textarea>
             </fieldset>
             <fieldset>
                 <legend>Task Completion Date</legend>
-            <input  type="datetime-local" name="datetime">
+            <input id="date"  type="datetime-local" name="datetime" required>
             </fieldset>
             <button class="screen-btn">Add Task</button>
             <input class="screen-btn-cancel" type="reset" onclick="hideScreen('newTaskScreen')" value="Cancel">
