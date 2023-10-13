@@ -1,0 +1,30 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "Todo web app",
+  "main": "main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Clint171/Todo-js.git"
+  },
+  "keywords": [
+    "todo"
+  ],
+  "author": "Clint171",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Clint171/Todo-js/issues"
+  },
+  "homepage": "https://github.com/Clint171/Todo-js#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.18.2"
+  }
+}
