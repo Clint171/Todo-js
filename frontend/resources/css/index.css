@@ -45,6 +45,7 @@ body{
     text-align: left;
     border-radius: 10px;
     margin: 5px;
+    transition: all 0.3s ease-in-out;
     
 }
 .item-check{
@@ -157,4 +158,20 @@ fieldset{
 }
 .overdue{
     background-color: rgb(255,125,125);
+}
+.button-delete{
+    width: 50%;
+    min-height: 3em;
+    margin: 1em auto;
+    border-radius: 10px;
+    background-color: rgb(255, 71, 71);
+    cursor: pointer;
+}
+.button-cancel{
+    width: 50%;
+    min-height: 3em;
+    margin: 1em auto;
+    border-radius: 10px;
+    background-color: rgb(138, 138, 138);
+    cursor: pointer;
 }

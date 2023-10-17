@@ -153,14 +153,18 @@ function displayTasks(tasks){
         var itemTitle = document.createElement("h2");
         var titleSpan = document.createElement("span");
         var check = document.createElement("input");
+        var description = document.createElement("p");
         var p = document.createElement("p");
         var pDate = document.createElement("span");
         var pTime = document.createElement("span");
         itemDiv.classList.add("item");;
         itemTitle.classList.add("item-title");
         check.classList.add("item-check");
+        itemDiv.setAttribute("id" , task.id);
+        itemDiv.setAttribute("onclick" , `viewTaskDescription(${task.id})`);
         check.setAttribute("type" , "checkbox");
         check.setAttribute("onclick" , `updateTask(${task.id})`);
+        description.setAttribute("id" , `description${task.id}`);
         if(task.overdue == true){
             if(task.completed == false){
                 itemDiv.classList.add("overdue");
@@ -176,14 +180,18 @@ function displayTasks(tasks){
             check.classList.remove("item-check-clicked");
             itemTitle.classList.remove("item-title-completed");
         }
+        description.classList.add("item-description");
+        description.classList.add("hidden");
         p.classList.add("item-description");
     
         titleSpan.textContent = task.title;
+        description.textContent = task.description;
         pDate.textContent = task.date.split("T")[0];
         pTime.textContent = task.date.split("T")[1].split(".")[0];
     
         container.appendChild(itemDiv);
         itemDiv.appendChild(itemTitle);
+        itemDiv.appendChild(description);
         itemDiv.appendChild(p);
         itemTitle.appendChild(titleSpan);
         itemTitle.appendChild(check);
@@ -225,4 +233,51 @@ function returnOverdueTasks(tasks){
 
 function clearTaskScreen(){
     container.innerHTML = "";
+}
+
+function search(){
+    var input = document.getElementById("searchInput").value;
+    var filteredTasks = [];
+    taskArray.forEach(task => {
+        if(task.title.includes(input)){
+            filteredTasks.push(task);
+        }
+    });
+    clearTaskScreen();
+    displayTasks(filteredTasks);
+}
+function deleteItem(array , id){
+    let confirm = prompt("Delete this task? Type y for Yes or n for No");
+    if(confirm == "y" || confirm == "Y" || confirm == "yes" || confirm == "Yes" || confirm == "YES"){
+        popup();
+        array.splice(id , 1);
+        localStorage.setItem("tasks" , JSON.stringify(taskArray));
+        displayAllTasks();
+    }
+    else{
+        return;
+    }
+}
+function viewTaskDescription(id){
+    let description = document.getElementById("description"+id);
+    let item = document.getElementById(id);
+    if(description.classList.contains("hidden")){
+        description.classList.remove("hidden");
+        var cancelButton = document.createElement("button");
+        var deleteButton = document.createElement("button");
+        cancelButton.textContent = "Cancel";
+        deleteButton.textContent = "Delete";
+        cancelButton.classList.add("button-cancel");
+        deleteButton.classList.add("button-delete");
+        cancelButton.setAttribute("onclick" , "viewTaskDescription()");
+        deleteButton.setAttribute("onclick" , `deleteItem(taskArray , ${id})`);
+        item.appendChild(cancelButton);
+        item.appendChild(deleteButton);
+    }
+    else{
+        description.classList.add("hidden");
+        //remove buttons
+        item.removeChild(item.lastChild);
+        item.removeChild(item.lastChild);
+    }
 }
