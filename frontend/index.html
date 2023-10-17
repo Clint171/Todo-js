@@ -7,7 +7,7 @@
     <meta name="keywords" content="tasks, manage, easy">
     <meta name="author" content="Clint Simiyu">
     <link rel="stylesheet" href="resources/css/index.css">
-    <link rel="favicon" href="img/favicon.ico">
+    <link rel="favicon" href="resources/img/favicon.ico">
     <title>Tasks</title>
 </head>
 <body>
@@ -17,8 +17,9 @@
     </div>
     <div class="navbar hidden" id="navbar">
         <span onclick="showScreen('newTaskScreen')">Add Task</span>
-        <span onclick="displayTasks()">View All Tasks</span>
+        <span onclick="displayAllTasks(taskArray)">View All Tasks</span>
         <span onclick="displayPendingTasks()">View Pending Tasks</span>
+        <span onclick="displayOverdueTasks()">View Overdue Tasks</span>
         <span onclick="displayCompletedTasks()">View Completed Tasks</span>
         <span>My Profile</span>
         <span>Settings</span>
