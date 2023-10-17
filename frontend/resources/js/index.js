@@ -83,7 +83,6 @@ function hideAllScreens(){
 }
 
 newTaskForm.addEventListener("submit", (event)=>{
-    popup();
     event.preventDefault();
     var title = document.getElementById("title").value;
     var description = document.getElementById("description").value;
@@ -93,6 +92,9 @@ newTaskForm.addEventListener("submit", (event)=>{
     taskArray.push(task);
     localStorage.setItem("tasks" , JSON.stringify(taskArray));
     hideScreen('newTaskScreen');
+    setTimeout(()=>{
+        popup();
+    }, 1000);
     displayAllTasks();
     newTaskForm.reset();
 });
