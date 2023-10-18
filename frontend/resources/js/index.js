@@ -82,7 +82,9 @@ function hideAllScreens(){
     }
 }
 
-newTaskForm.addEventListener("submit", (event)=>{
+newTaskForm.addEventListener("submit", async (event)=>{
+    popup();
+    async function save(){
     event.preventDefault();
     var title = document.getElementById("title").value;
     var description = document.getElementById("description").value;
@@ -91,10 +93,10 @@ newTaskForm.addEventListener("submit", (event)=>{
     var task = new Task(taskArray.length , title , description , date);
     taskArray.push(task);
     localStorage.setItem("tasks" , JSON.stringify(taskArray));
+    alert('Task added successfully');
     hideScreen('newTaskScreen');
-    setTimeout(()=>{
-        popup();
-    }, 1000);
+    }
+    await save();
     displayAllTasks();
     newTaskForm.reset();
 });
@@ -253,6 +255,10 @@ function deleteItem(array , id){
     if(confirm == "y" || confirm == "Y" || confirm == "yes" || confirm == "Yes" || confirm == "YES"){
         popup();
         array.splice(id , 1);
+        //UPDATE THE TASK IDS TO MATCH INDEXES
+        for(let i = 0; i < array.length; i++){
+            array[i].id = i;
+        }
         localStorage.setItem("tasks" , JSON.stringify(taskArray));
         displayAllTasks();
     }
