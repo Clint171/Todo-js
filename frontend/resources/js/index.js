@@ -89,6 +89,12 @@ newTaskForm.addEventListener("submit", async (event)=>{
     var description = document.getElementById("description").value;
     let date = document.getElementById("date").value;
     date = new Date(date);
+    if(date.getTimeZoneOffset < 0){
+        date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
+    }
+    else{
+        date.setTime( date.getTime() - date.getTimezoneOffset()*60*1000 );
+    }
     var task = new Task(taskArray.length , title , description , date);
     taskArray.push(task);
     localStorage.setItem("tasks" , JSON.stringify(taskArray));
