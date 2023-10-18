@@ -84,7 +84,6 @@ function hideAllScreens(){
 
 newTaskForm.addEventListener("submit", async (event)=>{
     popup();
-    async function save(){
     event.preventDefault();
     var title = document.getElementById("title").value;
     var description = document.getElementById("description").value;
@@ -93,12 +92,8 @@ newTaskForm.addEventListener("submit", async (event)=>{
     var task = new Task(taskArray.length , title , description , date);
     taskArray.push(task);
     localStorage.setItem("tasks" , JSON.stringify(taskArray));
-    alert('Task added successfully');
-    hideScreen('newTaskScreen');
-    }
-    await save();
-    displayAllTasks();
-    newTaskForm.reset();
+    location.reload();
+
 });
 
 class Task{
