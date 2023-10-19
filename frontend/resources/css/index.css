@@ -114,11 +114,9 @@ input[type="color"]{
 .navbar button{
     width: 40%;
     min-height: 3em;
-    background-color: antiquewhite;
     margin: auto;
 }
 .saving-popup{
-    background-color: rgb(253, 223, 183);
     position: fixed;
     top: 1em;
     left: 30%;
