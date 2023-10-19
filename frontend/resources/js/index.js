@@ -12,11 +12,22 @@ if(localStorage.getItem("tasks")){
     taskArray = JSON.parse(localStorage.getItem("tasks"));
 }
 taskArray.forEach( task =>{
-    if(task.date.toDateString > Date.now()){
+    let date = new Date(task.date);
+    let now = new Date();
+    if(now.getTimezoneOffset < 0){
+        now.setTime( now.getTime() + now.getTimezoneOffset()*60*1000 );
+    }
+    else{
+        now.setTime( now.getTime() - now.getTimezoneOffset()*60*1000 ); 
+    }
+    if(date.getTime() < now.getTime()){
         if(task.completed == false){
             alert("tasks are overdue");
             task.overdue = true;
         }
+    }
+    else{
+        alert("task is not overdue");
     }
 });
 
@@ -114,7 +125,15 @@ class Task{
         this.title = title;
         this.description = description;
         this.date = date;
-        if(this.date < Date.now()){
+        let now = new Date();
+        if(now.getTimezoneOffset < 0){
+            now.setTime( now.getTime() + now.getTimezoneOffset()*60*1000 );
+        }
+        else{
+            now.setTime( now.getTime() - now.getTimezoneOffset()*60*1000 );
+        }
+
+        if(this.date.getTime() < now.getTime()){
             this.overdue = true;
         }
         else{
