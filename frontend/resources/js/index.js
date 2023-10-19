@@ -22,12 +22,8 @@ taskArray.forEach( task =>{
     }
     if(date.getTime() < now.getTime()){
         if(task.completed == false){
-            alert("tasks are overdue");
             task.overdue = true;
         }
-    }
-    else{
-        alert("task is not overdue");
     }
 });
 
