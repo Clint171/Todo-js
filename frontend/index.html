@@ -13,7 +13,7 @@
 <body>
     <div class="header_div" id="header">
         <h1>Tasks</h1>
-        <input type="color" id="theme-selector">
+        <input type="color" id="theme-selector" value="#1F1F1F">
         <svg class="nav_icon" id="navIcon" onclick="showNav()" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24"><path fill="#000000" d="M4 18h16c.55 0 1-.45 1-1s-.45-1-1-1H4c-.55 0-1 .45-1 1s.45 1 1 1zm0-5h16c.55 0 1-.45 1-1s-.45-1-1-1H4c-.55 0-1 .45-1 1s.45 1 1 1zM3 7c0 .55.45 1 1 1h16c.55 0 1-.45 1-1s-.45-1-1-1H4c-.55 0-1 .45-1 1z"/></svg>
     </div>
     <div class="navbar hidden" id="navbar">
@@ -36,7 +36,7 @@
         <form id="newTaskForm" action="/" method="post">
             <fieldset>
                 <legend>Task Title</legend>
-                <input type="text" id="title" name="title" placeholder="Title" required>
+                <input type="text" id="title" name="title" placeholder="Title" autocomplete="off" required>
             </fieldset>
             <fieldset>
                 <legend>Task Description</legend>
