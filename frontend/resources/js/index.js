@@ -352,7 +352,7 @@ function changeTheme(themeColor){
     }
 
     for(let i = 0; i < items.length; i++){
-        items[i].style.backgroundColor = `rgb(${r+50},${g+50},${b+50})`;
+        items[i].style.backgroundColor = `rgb(${r+30},${g+30},${b+30})`;
     }
 
     //Check if rgb values are below 128
