@@ -14,6 +14,19 @@ let screens = document.querySelectorAll(".screen");
 let spans = document.querySelectorAll("span");
 themeSelector.value = localStorage.getItem("theme");
 
+if(localStorage.getItem("user") == null){
+    alert("No user found");
+    let loginSpan = document.createElement("span");
+    let signupSpan = document.createElement("span");
+    loginSpan.setAttribute("onclick" , "showScreen('loginScreen')");
+    signupSpan.setAttribute("onclick" , "showScreen('signupScreen')");
+    loginSpan.textContent = "Login";
+    signupSpan.textContent = "Signup";
+    nav.prepend(loginSpan);
+    nav.prepend(signupSpan);
+
+}
+
 popup();
 //localStorage.clear();
 if(localStorage.getItem("tasks")){
@@ -145,6 +158,14 @@ class Task{
             this.overdue = false;
         }
         this.completed = false;
+    }
+}
+class User{
+    email;
+    password;
+    constructor(email , password){
+        this.email = email;
+        this.password = password;
     }
 }
 
