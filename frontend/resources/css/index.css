@@ -83,6 +83,7 @@ input[type="color"]{
 }
 .navbar{
     position: fixed;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,0.3);
     top: 6.39em;
     right:0%;
     display: flex;
@@ -92,6 +93,7 @@ input[type="color"]{
     text-align: center;
     gap: 0.5em;
     width: 100%;
+    max-width: 600px;
     height: 100%;
     transition: all 0.3s ease-in-out;
     
