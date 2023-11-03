@@ -3,6 +3,8 @@ let navIcon = document.getElementById("navIcon");
 let addIcon = document.getElementById("addIcon");
 let popupDiv = document.getElementById("popup");
 let taskArray = [];
+let user;
+let loginForm = document.querySelector("#loginForm");
 let newTaskForm = document.getElementById("newTaskForm");
 let container = document.getElementById("container");
 
@@ -14,8 +16,6 @@ let screens = document.querySelectorAll(".screen");
 let spans = document.querySelectorAll("span");
 themeSelector.value = localStorage.getItem("theme");
 
-
-localStorage.setItem("user" , "test");
 if(localStorage.getItem("user") == null){
     let loginSpan = document.createElement("span");
     let signupSpan = document.createElement("span");
@@ -25,20 +25,27 @@ if(localStorage.getItem("user") == null){
     signupSpan.textContent = "Signup";
     nav.prepend(loginSpan);
     nav.prepend(signupSpan);
-
+    document.querySelector("#signout").remove();
 }
 else{
-    getTasks();
+    user = JSON.parse(localStorage.getItem("user"));
+    getTasks(user.email);
 }
 
-function getTasks(){
+function signout(){
+    localStorage.clear();
+    location.reload();
+}
+
+function getTasks(user){
     //get tasks from server
-    fetch("/tasks").then(response => response.json()).then(data => {
+    fetch(`/tasks/${user}`).then(response => response.json()).then(data => {
         //check if data is empty
         if(data.length == 0){
             return;
         }
-        localStorage.setItem("tasks" , JSON.stringify(data));
+        alert(JSON.stringify(data));
+        localStorage.setItem("tasks" , JSON.stringify(data.tasks));
     });
 }
 
@@ -125,6 +132,16 @@ function hideAllScreens(){
         element.classList.add("hidden");
     }
 }
+
+loginForm.addEventListener("submit" , async (event)=>{
+    popup();
+    event.preventDefault();
+    let email = document.querySelector("#loginEmail").value;
+    let password = document.querySelector("#loginPassword").value;
+    localStorage.setItem("user" , JSON.stringify(new User(email , password)));
+    location.reload();
+});
+
 
 newTaskForm.addEventListener("submit", async (event)=>{
     popup();

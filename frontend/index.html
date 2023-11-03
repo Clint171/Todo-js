@@ -28,6 +28,7 @@
         <span onclick="displayPendingTasks()">View Pending Tasks</span>
         <span onclick="displayOverdueTasks()">View Overdue Tasks</span>
         <span onclick="displayCompletedTasks()">View Completed Tasks</span>
+        <span onclick="signout()" id="signout">Sign out</span>
         <button onclick="hideNav()">Close</button>
     </div>
     <div class="saving-popup" id="popup">
@@ -40,7 +41,7 @@
         <form id="loginForm" method="post" action="/login">
             <fieldset>
                 <legend>Email</legend>
-                <input type="email" name="email" id="email">
+                <input type="email" name="email" id="loginEmail">
             </fieldset>
             <fieldset>
                 <legend>Password</legend>
