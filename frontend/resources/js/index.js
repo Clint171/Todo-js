@@ -4,6 +4,7 @@ let addIcon = document.getElementById("addIcon");
 let popupDiv = document.getElementById("popup");
 let taskArray = [];
 let user;
+let signupForm = document.querySelector("#signupForm");
 let loginForm = document.querySelector("#loginForm");
 let newTaskForm = document.getElementById("newTaskForm");
 let container = document.getElementById("container");
@@ -16,20 +17,13 @@ let screens = document.querySelectorAll(".screen");
 let spans = document.querySelectorAll("span");
 themeSelector.value = localStorage.getItem("theme");
 
-if(localStorage.getItem("user") == null){
-    let loginSpan = document.createElement("span");
-    let signupSpan = document.createElement("span");
-    loginSpan.setAttribute("onclick" , "showScreen('loginScreen')");
-    signupSpan.setAttribute("onclick" , "showScreen('signupScreen')");
-    loginSpan.textContent = "Login";
-    signupSpan.textContent = "Signup";
-    nav.prepend(loginSpan);
-    nav.prepend(signupSpan);
+if(localStorage.getItem("email") == null){
     document.querySelector("#signout").remove();
 }
 else{
-    user = JSON.parse(localStorage.getItem("user"));
-    getTasks(user.email);
+    document.querySelector("#loginSpan").remove();
+    document.querySelector("#signupSpan").remove();
+    let email = localStorage.getItem("email");
 }
 
 function signout(){
@@ -37,23 +31,22 @@ function signout(){
     location.reload();
 }
 
-function getTasks(user){
+function getTasks(email , callback){
     //get tasks from server
-    fetch(`/tasks/${user}`).then(response => response.json()).then(data => {
+    fetch(`/tasks/${email}`).then(response => response.json()).then(data => {
         //check if data is empty
         if(data.length == 0){
             return;
         }
-        alert(JSON.stringify(data));
-        localStorage.setItem("tasks" , JSON.stringify(data.tasks));
+        taskArray = data;
+        callback();
     });
 }
 
+
 popup();
 //localStorage.clear();
-if(localStorage.getItem("tasks")){
-    taskArray = JSON.parse(localStorage.getItem("tasks"));
-}
+
 taskArray.forEach( task =>{
     let date = new Date(task.date);
     let now = new Date();
@@ -70,11 +63,11 @@ taskArray.forEach( task =>{
     }
 });
 
-
-displayAllTasks();
+getTasks(localStorage.getItem("email") , displayAllTasks);
 
 function displayAllTasks(){
     clearTaskScreen();
+    getTasks(localStorage.getItem("email"));
     hideNav();
     displayTasks(taskArray);
     changeTheme(themeSelector.value);
@@ -133,17 +126,68 @@ function hideAllScreens(){
     }
 }
 
-loginForm.addEventListener("submit" , async (event)=>{
-    popup();
+signupForm.addEventListener("submit" , (event)=>{
+    event.preventDefault();
+    let email = document.querySelector("#email").value;
+    let password = document.querySelector("#password").value;
+    let passwordConfirmation = document.querySelector("#confirm").value;
+    alert(password+" : "+passwordConfirmation);
+    if(password != passwordConfirmation){
+        alert("Password and confirmation do not match. Please try again.");
+        signupForm.reset();
+    }
+    else{
+        popup();
+        let xhr = new XMLHttpRequest();
+        let form = new FormData();
+        form.append("email" , email);
+        form.append("password" , password);
+        xhr.open("POST" , "/signup" , true);
+        xhr.onload = ()=>{
+            if(xhr.responseText == "success"){
+                alert("Account created successfully!");
+                getTasks(email);
+                hideAllScreens();
+                displayAllTasks();
+                localStorage.setItem("email" , email);
+            }
+            else{
+                alert("Error creating account: "+ xhr.responseText);
+            }
+        };
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(JSON.stringify({"email" : email , "password" : password}));
+    }
+});
+
+loginForm.addEventListener("submit" , (event)=>{
     event.preventDefault();
     let email = document.querySelector("#loginEmail").value;
     let password = document.querySelector("#loginPassword").value;
-    localStorage.setItem("user" , JSON.stringify(new User(email , password)));
-    location.reload();
+    popup();
+    let xhr = new XMLHttpRequest();
+    let form = new FormData();
+    form.append("email" , email);
+    form.append("password" , password);
+    xhr.open("POST" , "/login" , true);
+    xhr.onload = ()=>{
+        if(xhr.responseText == "success"){
+            alert("Logged in successfully!");
+            getTasks(email);
+            hideAllScreens();
+            displayAllTasks();
+            localStorage.setItem("email" , email);
+        }
+        else{
+            alert("Error logging into account: "+ xhr.responseText);
+        }
+    };
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify({"email" : email , "password" : password}));
 });
 
 
-newTaskForm.addEventListener("submit", async (event)=>{
+newTaskForm.addEventListener("submit", (event)=>{
     popup();
     event.preventDefault();
     var title = document.getElementById("title").value;
@@ -156,25 +200,30 @@ newTaskForm.addEventListener("submit", async (event)=>{
     else{
         date.setTime( date.getTime() - date.getTimezoneOffset()*60*1000 );
     }
-    var task = new Task(taskArray.length , title , description , date);
-    taskArray.push(task);
-    localStorage.setItem("tasks" , JSON.stringify(taskArray));
-    location.reload();
-
+    var task = new Task(localStorage.getItem("email") ,taskArray.length , title , description , date);
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST" , "/tasks" , true);
+    xhr.onload = ()=>{
+        location.reload();
+    }
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(task));
 });
 
 class Task{
-    id;
-    title;
-    description;
-    date;
-    completed;
-    overdue;
-    constructor(id , title , description , date) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.date = date;
+    userEmail;
+    taskId;
+    taskTitle;
+    taskDescription;
+    taskCreationDate;
+    taskStatus;
+    taskOverdue;
+    constructor(email ,id , title , description , date) {
+        this.userEmail = email;
+        this.taskId = id;
+        this.taskTitle = title;
+        this.taskDescription = description;
+        this.taskCreationDate = date;
         let now = new Date();
         if(now.getTimezoneOffset < 0){
             now.setTime( now.getTime() + now.getTimezoneOffset()*60*1000 );
@@ -183,21 +232,13 @@ class Task{
             now.setTime( now.getTime() - now.getTimezoneOffset()*60*1000 );
         }
 
-        if(this.date.getTime() < now.getTime()){
+        if(this.taskCreationDate.getTime() < now.getTime()){
             this.overdue = true;
         }
         else{
             this.overdue = false;
         }
-        this.completed = false;
-    }
-}
-class User{
-    email;
-    password;
-    constructor(email , password){
-        this.email = email;
-        this.password = password;
+        this.taskStatus = "pending";
     }
 }
 
@@ -205,24 +246,22 @@ function popup(){
     popupDiv.classList.remove('hidden');
     setTimeout(()=>{
         popupDiv.classList.add("hidden");
-    }, 1000);
+    }, 1500);
 }
 
 function updateTask(id){
-    if(taskArray[id].completed == false){
-        taskArray[id].completed = true;
+    if(taskArray[id].taskStatus == "pending"){
+        taskArray[id].taskStatus = "completed";
     }
     else{
-        taskArray[id].completed = false;
+        taskArray[id].taskStatus = "pending";
     }
-    localStorage.setItem("tasks" , JSON.stringify(taskArray));
-    displayAllTasks();
 }
 
 function showDescription(id){
     var p = document.createElement("p");
     p.setAttribute("id" , i);
-    p.textContent = taskArray[id].description;
+    p.textContent = taskArray[id].taskDescription;
     p.style.width = "100%";
     document.getElementById(id).appendChild(p);
 }
@@ -242,13 +281,13 @@ function displayTasks(tasks){
         itemDiv.classList.add("item");;
         itemTitle.classList.add("item-title");
         check.classList.add("item-check");
-        itemDiv.setAttribute("id" , task.id);
-        itemDiv.setAttribute("onclick" , `viewTaskDescription(${task.id})`);
+        itemDiv.setAttribute("id" , task.taskId);
+        itemDiv.setAttribute("onclick" , `viewTaskDescription(${task.taskId})`);
         check.setAttribute("type" , "checkbox");
-        check.setAttribute("onclick" , `updateTask(${task.id})`);
-        description.setAttribute("id" , `description${task.id}`);
+        check.setAttribute("onclick" , `updateTask(${task.taskId})`);
+        description.setAttribute("id" , `description${task.taskId}`);
         if(task.overdue == true){
-            if(task.completed == false){
+            if(task.taskStatus == "pending"){
                 itemDiv.classList.add("overdue");
             }
         }
@@ -266,10 +305,10 @@ function displayTasks(tasks){
         description.classList.add("hidden");
         p.classList.add("item-description");
     
-        titleSpan.textContent = task.title;
-        description.textContent = task.description;
-        pDate.textContent = task.date.split("T")[0];
-        pTime.textContent = task.date.split("T")[1].split(".")[0];
+        titleSpan.textContent = task.taskTitle;
+        description.textContent = task.taskDescription;
+        pDate.textContent = task.taskCreationDate.split("T")[0];
+        pTime.textContent = task.taskCreationDate.split("T")[1].split(".")[0];
     
         container.appendChild(itemDiv);
         itemDiv.appendChild(itemTitle);
@@ -285,7 +324,7 @@ function displayTasks(tasks){
 function returnPendingTasks(tasks){
     var pendingTasks = [];
     tasks.forEach(task => {
-        if(task.completed == false){
+        if(task.taskStatus == "pending"){
             pendingTasks.push(task);
         }
     });
@@ -295,7 +334,7 @@ function returnPendingTasks(tasks){
 function returnCompletedTasks(tasks){
     var completedTasks = [];
     tasks.forEach(task => {
-        if(task.completed == true){
+        if(task.taskStatus == "completed"){
             completedTasks.push(task);
         }
     });
