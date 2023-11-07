@@ -143,13 +143,13 @@ signupForm.addEventListener("submit" , (event)=>{
         form.append("password" , password);
         xhr.open("POST" , "/signup" , true);
         xhr.onload = ()=>{
-            if(xhr.responseText == "success"){
+            if(xhr.responseText == ""){
                 alert("Account created successfully!");
                 localStorage.setItem("email" , email);
                 location.reload();
             }
             else{
-                alert("Error creating account: "+ xhr.responseText);
+                alert("Error creating account");
             }
         };
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
