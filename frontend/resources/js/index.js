@@ -253,14 +253,6 @@ function updateTask(id){
     }
 }
 
-function showDescription(id){
-    var p = document.createElement("p");
-    p.setAttribute("id" , i);
-    p.textContent = taskArray[id].taskDescription;
-    p.style.width = "100%";
-    document.getElementById(id).appendChild(p);
-}
-
 //Create function to display tasks that takes the array of tasks as a parameter
 function displayTasks(tasks){
 
@@ -276,11 +268,11 @@ function displayTasks(tasks){
         itemDiv.classList.add("item");;
         itemTitle.classList.add("item-title");
         check.classList.add("item-check");
-        itemDiv.setAttribute("id" , task.taskId);
-        itemDiv.setAttribute("onclick" , `viewTaskDescription(${task.taskId})`);
+        itemDiv.setAttribute("id" , task._id);
+        itemDiv.setAttribute("onclick" , `viewTaskDescription(${task._id})`);
         check.setAttribute("type" , "checkbox");
-        check.setAttribute("onclick" , `updateTask(${task.taskId})`);
-        description.setAttribute("id" , `description${task.taskId}`);
+        check.setAttribute("onclick" , `updateTask(${task._id})`);
+        description.setAttribute("id" , `description${task._id}`);
         if(task.overdue == true){
             if(task.taskStatus == "pending"){
                 itemDiv.classList.add("overdue");
@@ -362,17 +354,23 @@ function search(){
     clearTaskScreen();
     displayTasks(filteredTasks);
 }
-function deleteItem(array , id){
+
+function deleteItem(id){
     let confirm = prompt("Delete this task? Type y for Yes or n for No");
     if(confirm == "y" || confirm == "Y" || confirm == "yes" || confirm == "Yes" || confirm == "YES"){
         popup();
-        array.splice(id , 1);
-        //UPDATE THE TASK IDS TO MATCH INDEXES
-        for(let i = 0; i < array.length; i++){
-            array[i].id = i;
+        let xhr = new XMLHttpRequest();
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.open("DELETE" , "/tasks/"+ localStorage.getItem("email"));
+        xhr.onload = ()=>{
+            if(xhr.responseText == "" || xhr.responseText == "success"){
+                location.reload();
+            }
+            else{
+                alert("Error deleting task.");
+            }
         }
-        localStorage.setItem("tasks" , JSON.stringify(taskArray));
-        displayAllTasks();
+        xhr.send({"_id" : id});
     }
     else{
         return;
@@ -390,7 +388,7 @@ function viewTaskDescription(id){
         cancelButton.classList.add("button-cancel");
         deleteButton.classList.add("button-delete");
         cancelButton.setAttribute("onclick" , "viewTaskDescription()");
-        deleteButton.setAttribute("onclick" , `deleteItem(taskArray , ${id})`);
+        deleteButton.setAttribute("onclick" , `deleteItem(${id})`);
         item.appendChild(cancelButton);
         item.appendChild(deleteButton);
     }
@@ -404,11 +402,15 @@ function viewTaskDescription(id){
 
 
 //Everything themes starts here:
-
-if(themeSelector.value == null){
-    themeSelector.value = "#1F1F1F";
+if(localStorage.getItem("theme")){
+    changeTheme(localStorage.getItem("theme"));
+    themeSelector.value = localStorage.getItem("theme");
 }
+else{
+    changeTheme("#1F1F1F");
+    themeSelector.value = "#1F1F1F";
 
+}
 themeSelector.addEventListener("change", function(){
     changeTheme(themeSelector.value);
     localStorage.setItem("theme", themeSelector.value);
