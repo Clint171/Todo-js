@@ -425,7 +425,7 @@ function viewTaskDescription(id){
     else{
         description.classList.add("hidden");
         //remove buttons
-        item.removeChild(item.lastChild);
+        //item.removeChild(item.lastChild);
         item.removeChild(item.lastChild);
     }
 }
