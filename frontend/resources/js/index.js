@@ -146,10 +146,8 @@ signupForm.addEventListener("submit" , (event)=>{
         xhr.onload = ()=>{
             if(xhr.responseText == "success"){
                 alert("Account created successfully!");
-                getTasks(email);
-                hideAllScreens();
-                displayAllTasks();
                 localStorage.setItem("email" , email);
+                location.reload();
             }
             else{
                 alert("Error creating account: "+ xhr.responseText);
@@ -173,10 +171,8 @@ loginForm.addEventListener("submit" , (event)=>{
     xhr.onload = ()=>{
         if(xhr.responseText == "success"){
             alert("Logged in successfully!");
-            getTasks(email);
-            hideAllScreens();
-            displayAllTasks();
             localStorage.setItem("email" , email);
+            location.reload();
         }
         else{
             alert("Error logging into account: "+ xhr.responseText);
