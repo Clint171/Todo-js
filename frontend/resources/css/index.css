@@ -4,7 +4,8 @@ body{
 }
 
 #welcome{
-    max-width: fit-content;
+    width: fit-content;
+    max-width: 95%;
     margin: 0 auto;
 }
 
