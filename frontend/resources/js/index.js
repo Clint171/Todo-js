@@ -68,6 +68,11 @@ else{
     tutorial();
 }
 function displayAllTasks(){
+    if(!localStorage.getItem("email") && screenId != "loginScreen" && screenId != "signupScreen"){
+        alert("Please login or signup to continue");
+        tutorial();
+        return;
+    }
     clearTaskScreen();
     getTasks(localStorage.getItem("email"));
     hideNav();
@@ -76,16 +81,31 @@ function displayAllTasks(){
 }
 
 function displayPendingTasks(){
+    if(!localStorage.getItem("email") && screenId != "loginScreen" && screenId != "signupScreen"){
+        alert("Please login or signup to continue");
+        tutorial();
+        return;
+    }
     clearTaskScreen();
     hideNav();
     displayTasks(returnPendingTasks(taskArray));
 }
 function displayCompletedTasks(){
+    if(!localStorage.getItem("email") && screenId != "loginScreen" && screenId != "signupScreen"){
+        alert("Please login or signup to continue");
+        tutorial();
+        return;
+    }
     clearTaskScreen();
     hideNav();
     displayTasks(returnCompletedTasks(taskArray));
 }
 function displayOverdueTasks(){
+    if(!localStorage.getItem("email") && screenId != "loginScreen" && screenId != "signupScreen"){
+        alert("Please login or signup to continue");
+        tutorial();
+        return;
+    }
     clearTaskScreen();
     hideNav();
     displayTasks(returnOverdueTasks(taskArray));
@@ -261,7 +281,11 @@ function updateTask(id){
 
 //Create function to display tasks that takes the array of tasks as a parameter
 function displayTasks(tasks){
-
+    if(!localStorage.getItem("email")){
+        alert("Please login or signup to continue");
+        tutorial();
+        return;
+    }
     tasks.forEach(task => {
         var itemDiv = document.createElement("div");
         var itemTitle = document.createElement("h2");
@@ -478,5 +502,5 @@ function hexToRgb(hex) {
 
 //Function for usage tutorial
 function tutorial(){
-    alert("Welcome to Task Manager! \n\nTo get started, click the + icon in the bottom right corner to add a new task. \n\nYou can view your tasks by clicking the menu icon in the top right corner. \n\nYou can also change the theme of the app by clicking the color palette icon in the top right corner. \n\nEnjoy!");
+    alert("Welcome to Task Manager! \n\nTo get started, click on the icon  at the top right corner of your screen and \n--Sign up if you're new\n--Log in if you already have an account \n\nYou can view your tasks afterwards by clicking the menu icon in the top right corner. \n\nYou can also change the theme of the app by clicking the color palette icon in the top right corner, right next to the menu icon. \n\nEnjoy!");
 }
