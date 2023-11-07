@@ -23,7 +23,6 @@ if(localStorage.getItem("email") == null){
 else{
     document.querySelector("#loginSpan").remove();
     document.querySelector("#signupSpan").remove();
-    let email = localStorage.getItem("email");
 }
 
 function signout(){
@@ -269,9 +268,9 @@ function displayTasks(tasks){
         itemTitle.classList.add("item-title");
         check.classList.add("item-check");
         itemDiv.setAttribute("id" , task._id);
-        itemDiv.setAttribute("onclick" , `viewTaskDescription(${task._id})`);
+        itemDiv.setAttribute("onclick" , `viewTaskDescription("${task._id}")`);
         check.setAttribute("type" , "checkbox");
-        check.setAttribute("onclick" , `updateTask(${task._id})`);
+        check.setAttribute("onclick" , `updateTask("${task._id}")`);
         description.setAttribute("id" , `description${task._id}`);
         if(task.overdue == true){
             if(task.taskStatus == "pending"){
@@ -360,8 +359,7 @@ function deleteItem(id){
     if(confirm == "y" || confirm == "Y" || confirm == "yes" || confirm == "Yes" || confirm == "YES"){
         popup();
         let xhr = new XMLHttpRequest();
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.open("DELETE" , "/tasks/"+ localStorage.getItem("email"));
+        xhr.open("DELETE" , "/tasks/"+ localStorage.getItem("email") , true);
         xhr.onload = ()=>{
             if(xhr.responseText == "" || xhr.responseText == "success"){
                 location.reload();
@@ -370,7 +368,8 @@ function deleteItem(id){
                 alert("Error deleting task.");
             }
         }
-        xhr.send({"_id" : id});
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(JSON.stringify({"_id" : id}));
     }
     else{
         return;
@@ -387,8 +386,8 @@ function viewTaskDescription(id){
         deleteButton.textContent = "Delete";
         cancelButton.classList.add("button-cancel");
         deleteButton.classList.add("button-delete");
-        cancelButton.setAttribute("onclick" , "viewTaskDescription()");
-        deleteButton.setAttribute("onclick" , `deleteItem(${id})`);
+        cancelButton.setAttribute("onclick" , `viewTaskDescription("${id}")`);
+        deleteButton.setAttribute("onclick" , `deleteItem("${id}")`);
         item.appendChild(cancelButton);
         item.appendChild(deleteButton);
     }
