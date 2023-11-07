@@ -411,15 +411,15 @@ function viewTaskDescription(id){
     let item = document.getElementById(id);
     if(description.classList.contains("hidden")){
         description.classList.remove("hidden");
-        var cancelButton = document.createElement("button");
+        //var cancelButton = document.createElement("button");
         var deleteButton = document.createElement("button");
-        cancelButton.textContent = "Cancel";
+        //cancelButton.textContent = "Cancel";
         deleteButton.textContent = "Delete";
-        cancelButton.classList.add("button-cancel");
+        //cancelButton.classList.add("button-cancel");
         deleteButton.classList.add("button-delete");
-        cancelButton.setAttribute("onclick" , `viewTaskDescription("${id}")`);
+        //cancelButton.setAttribute("onclick" , `viewTaskDescription("${id}")`);
         deleteButton.setAttribute("onclick" , `deleteItem("${id}")`);
-        item.appendChild(cancelButton);
+        //item.appendChild(cancelButton);
         item.appendChild(deleteButton);
     }
     else{
