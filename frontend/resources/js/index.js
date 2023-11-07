@@ -131,7 +131,6 @@ signupForm.addEventListener("submit" , (event)=>{
     let email = document.querySelector("#email").value;
     let password = document.querySelector("#password").value;
     let passwordConfirmation = document.querySelector("#confirm").value;
-    alert(password+" : "+passwordConfirmation);
     if(password != passwordConfirmation){
         alert("Password and confirmation do not match. Please try again.");
         signupForm.reset();
