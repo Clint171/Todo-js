@@ -61,9 +61,12 @@ taskArray.forEach( task =>{
         }
     }
 });
-
+if(localStorage.getItem("email")){
 getTasks(localStorage.getItem("email") , displayAllTasks);
-
+}
+else{
+    tutorial();
+}
 function displayAllTasks(){
     clearTaskScreen();
     getTasks(localStorage.getItem("email"));
@@ -102,12 +105,16 @@ function hideNav(){
     addIcon.classList.remove("hidden");
 }
 function showScreen(screenId){
+    if(!localStorage.getItem("email") && screenId != "loginScreen" && screenId != "signupScreen"){
+        alert("Please login or signup to continue");
+        tutorial();
+        return;
+    }
     hideAllScreens();
     let screen = document.getElementById(screenId);
     screen.classList.remove("hidden");
     hideNav();
     addIcon.classList.add("hidden");
-
 }
 function hideScreen(screenId){
     let screen = document.getElementById(screenId);
@@ -467,4 +474,9 @@ function hexToRgb(hex) {
       rgb.push(parseInt(hex.substring(i * 2, i * 2 + 2), 16));
     }
     return rgb;
+}
+
+//Function for usage tutorial
+function tutorial(){
+    alert("Welcome to Task Manager! \n\nTo get started, click the + icon in the bottom right corner to add a new task. \n\nYou can view your tasks by clicking the menu icon in the top right corner. \n\nYou can also change the theme of the app by clicking the color palette icon in the top right corner. \n\nEnjoy!");
 }

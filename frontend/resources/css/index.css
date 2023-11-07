@@ -3,6 +3,11 @@ body{
     margin: 0;
 }
 
+#welcome{
+    max-width: fit-content;
+    margin: 0 auto;
+}
+
 .header_div{
     position: fixed;
     top: 0;
