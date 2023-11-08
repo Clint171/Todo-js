@@ -319,12 +319,20 @@ function popupEnd(){
 }
 
 function updateTask(id){
-    if(taskArray[id].taskStatus == "pending"){
-        taskArray[id].taskStatus = "completed";
+    let task = taskArray.find(task => task._id == id);
+    if(task.taskStatus == "pending"){
+        task.taskStatus = "completed";
     }
     else{
-        taskArray[id].taskStatus = "pending";
+        task.taskStatus = "pending";
     }
+    let xhr = new XMLHttpRequest();
+    xhr.open("PUT" , "/tasks/"+ localStorage.getItem("email") , true);
+    xhr.onload = ()=>{
+        location.reload();
+    }
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(task));
 }
 
 //Create function to display tasks that takes the array of tasks as a parameter
