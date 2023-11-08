@@ -356,7 +356,7 @@ function displayTasks(tasks){
                 itemDiv.classList.add("overdue");
             }
         }
-        if(task.completed == true){
+        if(task.taskStatus == "completed"){
             itemTitle.classList.add("item-title-completed");
             check.setAttribute("checked" , "");
             check.classList.add("item-check-clicked");
