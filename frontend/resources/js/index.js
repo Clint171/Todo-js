@@ -351,7 +351,14 @@ function displayTasks(tasks){
         var p = document.createElement("p");
         var pDate = document.createElement("span");
         var pTime = document.createElement("span");
-        itemDiv.classList.add("item");;
+
+        let rgb = hexToRgb(themeSelector.value);
+        let r = rgb[0];
+        let g = rgb[1];
+        let b = rgb[2];
+
+        itemDiv.classList.add("item");
+        itemDiv.style.backgroundColor = `rgb(${r+30},${g+30},${b+30})`;
         itemTitle.classList.add("item-title");
         check.classList.add("item-check");
         itemDiv.setAttribute("id" , task._id);
