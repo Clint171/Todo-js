@@ -2,11 +2,13 @@ let nav = document.getElementById("navbar");
 let navIcon = document.getElementById("navIcon");
 let addIcon = document.getElementById("addIcon");
 let popupDiv = document.getElementById("popup");
+popupStart();
 let taskArray = [];
 let user;
 let signupForm = document.querySelector("#signupForm");
 let loginForm = document.querySelector("#loginForm");
 let newTaskForm = document.getElementById("newTaskForm");
+let editTaskForm = document.getElementById("editTaskForm");
 let container = document.getElementById("container");
 
 let themeSelector = document.getElementById("theme-selector");
@@ -42,8 +44,6 @@ function getTasks(email , callback){
     });
 }
 
-
-popup();
 //localStorage.clear();
 
 taskArray.forEach( task =>{
@@ -67,6 +67,9 @@ getTasks(localStorage.getItem("email") , displayAllTasks);
 else{
     tutorial();
 }
+
+popupEnd();
+
 function displayAllTasks(){
     if(!localStorage.getItem("email") && screenId != "loginScreen" && screenId != "signupScreen"){
         alert("Please login or signup to continue");
@@ -74,7 +77,6 @@ function displayAllTasks(){
         return;
     }
     clearTaskScreen();
-    getTasks(localStorage.getItem("email"));
     hideNav();
     displayTasks(taskArray);
     changeTheme(themeSelector.value);
@@ -151,6 +153,24 @@ function hideAllScreens(){
         element.classList.add("hidden");
     }
 }
+function showUpdateWindow(id){
+    let updateWindow = document.getElementById("editTaskScreen");
+    let item = document.getElementById(id);
+    let description = document.getElementById("description"+id);
+    let taskId = document.getElementById("editId");
+    let title = document.getElementById("editTitle");
+    let descriptionEdit = document.getElementById("editDescription");
+    let date = document.getElementById("editDate");
+    let task = taskArray.find(task => task._id == id);
+    taskId.value = task._id;
+    title.value = task.taskTitle;
+    descriptionEdit.value = task.taskDescription;
+    date.value = task.taskCreationDate.split("T")[0];
+    updateWindow.classList.remove("hidden");
+    description.classList.add("hidden");
+    item.removeChild(item.lastChild);
+    item.removeChild(item.lastChild);
+}
 
 signupForm.addEventListener("submit" , (event)=>{
     event.preventDefault();
@@ -162,7 +182,7 @@ signupForm.addEventListener("submit" , (event)=>{
         signupForm.reset();
     }
     else{
-        popup();
+        popupStart();
         let xhr = new XMLHttpRequest();
         let form = new FormData();
         form.append("email" , email);
@@ -172,6 +192,7 @@ signupForm.addEventListener("submit" , (event)=>{
             if(xhr.responseText == ""){
                 alert("Account created successfully!");
                 localStorage.setItem("email" , email);
+                popupEnd();
                 location.reload();
             }
             else{
@@ -187,7 +208,7 @@ loginForm.addEventListener("submit" , (event)=>{
     event.preventDefault();
     let email = document.querySelector("#loginEmail").value;
     let password = document.querySelector("#loginPassword").value;
-    popup();
+    popupStart();
     let xhr = new XMLHttpRequest();
     let form = new FormData();
     form.append("email" , email);
@@ -197,6 +218,7 @@ loginForm.addEventListener("submit" , (event)=>{
         if(xhr.responseText == "success"){
             alert("Logged in successfully!");
             localStorage.setItem("email" , email);
+            popupEnd();
             location.reload();
         }
         else{
@@ -209,7 +231,7 @@ loginForm.addEventListener("submit" , (event)=>{
 
 
 newTaskForm.addEventListener("submit", (event)=>{
-    popup();
+    popupStart();
     event.preventDefault();
     var title = document.getElementById("title").value;
     var description = document.getElementById("description").value;
@@ -221,10 +243,36 @@ newTaskForm.addEventListener("submit", (event)=>{
     else{
         date.setTime( date.getTime() - date.getTimezoneOffset()*60*1000 );
     }
-    var task = new Task(localStorage.getItem("email") ,taskArray.length , title , description , date);
+    var task = new Task(localStorage.getItem("email") , title , description , date);
     let xhr = new XMLHttpRequest();
     xhr.open("POST" , "/tasks" , true);
     xhr.onload = ()=>{
+        popupEnd();
+        location.reload();
+    }
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(task));
+});
+
+editTaskForm.addEventListener("submit", (event)=>{
+    popupStart();
+    event.preventDefault();
+    var title = document.getElementById("editTitle").value;
+    var description = document.getElementById("editDescription").value;
+    let date = document.getElementById("editDate").value;
+    date = new Date(date);
+    if(date.getTimeZoneOffset < 0){
+        date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
+    }
+    else{
+        date.setTime( date.getTime() - date.getTimezoneOffset()*60*1000 );
+    }
+    var task = new Task(localStorage.getItem("email") , title , description , date);
+    task._id = document.getElementById("editId").value;
+    let xhr = new XMLHttpRequest();
+    xhr.open("PUT" , "/tasks/"+ localStorage.getItem("email") , true);
+    xhr.onload = ()=>{
+        popupEnd();
         location.reload();
     }
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -233,15 +281,13 @@ newTaskForm.addEventListener("submit", (event)=>{
 
 class Task{
     userEmail;
-    taskId;
     taskTitle;
     taskDescription;
     taskCreationDate;
     taskStatus;
     taskOverdue;
-    constructor(email ,id , title , description , date) {
+    constructor(email , title , description , date) {
         this.userEmail = email;
-        this.taskId = id;
         this.taskTitle = title;
         this.taskDescription = description;
         this.taskCreationDate = date;
@@ -263,11 +309,13 @@ class Task{
     }
 }
 
-function popup(){
+function popupStart(){
     popupDiv.classList.remove('hidden');
-    setTimeout(()=>{
-        popupDiv.classList.add("hidden");
-    }, 1500);
+}
+
+function popupEnd(){
+    popupDiv.classList.add("hidden");
+
 }
 
 function updateTask(id){
@@ -388,11 +436,12 @@ function search(){
 function deleteItem(id){
     let confirm = prompt("Delete this task? Type y for Yes or n for No");
     if(confirm == "y" || confirm == "Y" || confirm == "yes" || confirm == "Yes" || confirm == "YES"){
-        popup();
+        popupStart();
         let xhr = new XMLHttpRequest();
         xhr.open("DELETE" , "/tasks/"+ localStorage.getItem("email") , true);
         xhr.onload = ()=>{
             if(xhr.responseText == "" || xhr.responseText == "success"){
+                popupEnd();
                 location.reload();
             }
             else{
@@ -411,21 +460,21 @@ function viewTaskDescription(id){
     let item = document.getElementById(id);
     if(description.classList.contains("hidden")){
         description.classList.remove("hidden");
-        //var cancelButton = document.createElement("button");
+        var updateButton = document.createElement("button");
         var deleteButton = document.createElement("button");
-        //cancelButton.textContent = "Cancel";
+        updateButton.textContent = "Update";
         deleteButton.textContent = "Delete";
-        //cancelButton.classList.add("button-cancel");
+        updateButton.classList.add("button-cancel");
         deleteButton.classList.add("button-delete");
-        //cancelButton.setAttribute("onclick" , `viewTaskDescription("${id}")`);
+        updateButton.setAttribute("onclick" , `showUpdateWindow("${id}")`);
         deleteButton.setAttribute("onclick" , `deleteItem("${id}")`);
-        //item.appendChild(cancelButton);
         item.appendChild(deleteButton);
+        item.appendChild(updateButton);
     }
     else{
         description.classList.add("hidden");
         //remove buttons
-        //item.removeChild(item.lastChild);
+        item.removeChild(item.lastChild);
         item.removeChild(item.lastChild);
     }
 }

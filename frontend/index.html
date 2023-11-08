@@ -82,7 +82,7 @@
             </fieldset>
             <fieldset>
                 <legend>Task Description</legend>
-            <textarea id="description" name="description" placeholder="Description" required></textarea>
+            <textarea id="description" name="description" placeholder="Description"></textarea>
             </fieldset>
             <fieldset>
                 <legend>Task Completion Date</legend>
@@ -91,6 +91,26 @@
             
             <button class="screen-btn">Add Task</button>
             <button class="screen-btn-cancel" type="reset" onclick="hideScreen('newTaskScreen')">Cancel</button>
+        </form>
+    </div>
+    <div class="screen hidden" id="editTaskScreen">
+        <h2>Edit Task</h2>
+        <form id="editTaskForm" action="/" method="put">
+            <input type="hidden" id="editId" name="id">
+            <fieldset>
+                <legend>Task Title</legend>
+                <input type="text" id="editTitle" name="title" placeholder="Title" autocomplete="off" required>
+            </fieldset>
+            <fieldset>
+                <legend>Task Description</legend>
+            <textarea id="editDescription" name="description" placeholder="Description"></textarea>
+            </fieldset>
+            <fieldset>
+                <legend>Task Completion Date</legend>
+            <input id="editDate"  type="datetime-local" name="datetime" required>
+            </fieldset>
+            <button class="screen-btn">Update Task</button>
+            <button class="screen-btn-cancel" type="reset" onclick="hideScreen('editTaskScreen')">Cancel</button>
         </form>
     </div>
     </div>
