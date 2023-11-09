@@ -165,7 +165,7 @@ function showUpdateWindow(id){
     taskId.value = task._id;
     title.value = task.taskTitle;
     descriptionEdit.value = task.taskDescription;
-    date.value = task.taskCreationDate.split("T")[0];
+    date.innerText = task.taskCreationDate;
     updateWindow.classList.remove("hidden");
     description.classList.add("hidden");
     item.removeChild(item.lastChild);
@@ -257,9 +257,19 @@ newTaskForm.addEventListener("submit", (event)=>{
 editTaskForm.addEventListener("submit", (event)=>{
     popupStart();
     event.preventDefault();
+    let currentTask = taskArray.find(task => task._id == document.getElementById("editId").value);
     var title = document.getElementById("editTitle").value;
+    if(title == ""){
+        title = currentTask.taskTitle;
+    }
     var description = document.getElementById("editDescription").value;
+    if(description == ""){
+        description = currentTask.taskDescription;
+    }
     let date = document.getElementById("editDate").value;
+    if(date == ""){
+        date = currentTask.taskCreationDate;
+    }
     date = new Date(date);
     if(date.getTimeZoneOffset < 0){
         date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
