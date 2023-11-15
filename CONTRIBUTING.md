@@ -42,6 +42,6 @@ The project is always looking for help with the following tasks:
 
 **Getting Help**
 
-If you need help contributing to the project, please don't hesitate to ask. You can ask questions on the project's [GitHub Discussions](https://github.com/Clint171/Javascript-File-Server/discussions/)
+If you need help contributing to the project, please don't hesitate to ask. You can ask questions on the project's [GitHub Discussions](https://github.com/Clint171/Todo-js/discussions/)
 
 **Thank you for contributing to Todo-js!**
