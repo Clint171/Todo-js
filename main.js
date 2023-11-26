@@ -1,5 +1,6 @@
 const express = require("express");
 //const router = require("./lib/routers/router.js");
+const db = require("./lib/db/db.js");
 const signupRouter = require("./lib/routers/signupRouter.js");
 const loginRouter = require("./lib/routers/loginRouter.js");
 const taskRouter = require("./lib/routers/taskRouter.js");
