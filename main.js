@@ -1,5 +1,5 @@
 const express = require("express");
-//const router = require("./lib/routers/router.js");
+const cors = require("cors");
 const db = require("./lib/db/db.js");
 const signupRouter = require("./lib/routers/user/signupRouter.js");
 const loginRouter = require("./lib/routers/user/loginRouter.js");
@@ -16,6 +16,7 @@ let port = process.env.PORT || 3500;
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
+app.use(cors());
 app.use(signupRouter);
 app.use(loginRouter);
 app.use("/users" ,userRouter);

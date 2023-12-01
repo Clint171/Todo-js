@@ -17,6 +17,9 @@ let body = document.querySelector("body");
 let header = document.getElementById("header");
 let screens = document.querySelectorAll(".screen");
 let spans = document.querySelectorAll("span");
+
+localStorage.setItem("token", "eyJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI2NTY5OTJkZGM4MTgwNDRhNDQ3ZTg4MWEiLCJmaXJzdE5hbWUiOiJDbGludCIsImxhc3ROYW1lIjoiU2ltaXl1IiwicGhvbmVzIjpbXSwiZGVmYXVsdEVtYWlsIjoiY2xpbnRzaW1peXUwMDRAZ21haWwuY29tIiwiZW1haWxzIjpbImNsaW50c2ltaXl1MDA0QGdtYWlsLmNvbSJdLCJwYXNzd29yZCI6IiQyYiQxMCR4TjBNNTNJRnNJN3k3SG1jNkN3VWtPemVDRkR6SmJicDdzNXNMVmJ3Vm1RdE5IV2NDT2NmQyIsImdyb3VwcyI6W10sInRhc2tzIjpbXSwiZnJpZW5kcyI6W10sImZyaWVuZFJlcXVlc3RzIjpbXSwiZnJpZW5kUmVxdWVzdHNTZW50IjpbXSwiZm9sbG93ZXJzIjpbXSwiZm9sbG93aW5nIjpbXSwib3RoZXJOYW1lcyI6IiIsImZ1bGxOYW1lIjoiQ2xpbnQgU2ltaXl1IiwidmVyaWZpY2F0aW9uQ29kZSI6bnVsbCwidmVyaWZpZWQiOnRydWUsInZlcmlmaWNhdGlvbkNvZGVFeHBpcmF0aW9uVXRjRGF0ZSI6bnVsbCwidmVyaWZpY2F0aW9uQ29kZUV4cGlyYXRpb25VdGNUaW1lIjpudWxsLCJ2ZXJpZmljYXRpb25Db2RlRXhwaXJhdGlvblV0Y1RpbWVzdGFtcCI6bnVsbCwiY3JlYXRpb25VdGNEYXRlIjoiMS8xMS8yMDIzIiwiY3JlYXRpb25VdGNUaW1lIjoiODoxOjMzIiwiY3JlYXRpb25VdGNUaW1lc3RhbXAiOjE3MDE0MTc2OTM4MjgsInZpc2liaWxpdHkiOiJwdWJsaWMiLCJzdGF0dXMiOiJhY3RpdmUiLCJhY2NvdW50VHlwZSI6ImZyZWUiLCJfX3YiOjAsImxhc3RMb2dpblV0Y0RhdGUiOiJGcmkgRGVjIDAxIDIwMjMgMDg6MDM6NDEgR01UKzAwMDAgKENvb3JkaW5hdGVkIFVuaXZlcnNhbCBUaW1lKSJ9._wwMyVFlFxZ_QFbU8OhUGykX_qTnHKnwfhj48EBLBNU");
+
 themeSelector.value = localStorage.getItem("theme");
 
 if(localStorage.getItem("email") == null){
@@ -577,4 +580,41 @@ function hexToRgb(hex) {
 //Function for usage tutorial
 function tutorial(){
     alert("Welcome to Task Manager! \n\nTo get started, click on the icon  at the top right corner of your screen and \n--Sign up if you're new\n--Log in if you already have an account \n\nYou can view your tasks afterwards by clicking the menu icon in the top right corner. \n\nYou can also change the theme of the app by clicking the color palette icon in the top right corner, right next to the menu icon. \n\nEnjoy!");
+}
+
+function searchUsers(){
+    let searchInput = document.getElementById("search").value;
+    console.log(searchInput);
+    let fetchOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : 'Bearer ' + localStorage.getItem("token"),
+            'Access-Control-Allow-Origin' : '*'
+        }
+    };
+    fetch(`https://masterplanner.onrender.com/users/search/${searchInput}`, fetchOptions).then(response => response.json()).then(data => {
+        if(data.length == 0){
+            alert("No users found");
+            return;
+        }
+        let users = data;
+        let usersDiv = document.createElement("div");
+        usersDiv.classList.add("users");
+        users.forEach(user => {
+            let userDiv = document.createElement("div");
+            userDiv.classList.add("user");
+            let name = document.createElement("h3");
+            let id = document.createElement("p");
+            let button = document.createElement("button");
+            name.textContent = user.fullName;
+            id.textContent = user.id;
+            button.textContent = "Add";
+            button.setAttribute("onclick" , `addUser("${user.email}")`);
+            userDiv.appendChild(name);
+            userDiv.appendChild(email);
+            userDiv.appendChild(button);
+            usersDiv.appendChild(userDiv);
+        });
+    });
 }
