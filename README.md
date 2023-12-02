@@ -1,4 +1,4 @@
-# Todo-js
+# Masterplanner
 Task manager for all your needs.
 
 ~ Big improvements coming soon...
@@ -7,7 +7,6 @@ View the current Todo site [here](https://clints-todo.onrender.com).
 
 New api available at [masterplanner.onrender.com](https://masterplanner.onrender.com)
 
-If you would like to contribute, please read [this](CONTRIBUTING.md) first.
 
 ## Contents
 * [Api Usage](#api-usage)
@@ -25,7 +24,7 @@ If you would like to contribute, please read [this](CONTRIBUTING.md) first.
         * [Getting groups](#getting-groups)
         * [Updating group information](#updating-group-information)
         * [Deleting groups](#deleting-groups)
-
+* [Contribution](#contribution)
 
 ## Api Usage
 
@@ -35,7 +34,7 @@ All requests are made to `https://masterplanner.onrender.com`
 
 #### Signing up
 
-To create an account , send a `POST` request to the route `signup`
+To create an account , send a `POST` request to the route `/signup`
 
 The request body should have the following <b>REQUIRED</b> fields : 
 * `firstName` - A string of the user's first name
@@ -56,7 +55,7 @@ Once you sign up, an email is sent to the user account's default email. Follow t
 
 #### Logging in
 
-To log in , send a `POST` request to `login` with the following body :
+To log in , send a `POST` request to `/login` with the following body :
 * `email` - The default email of the account
 * `password` - The account password
 
@@ -100,3 +99,7 @@ This will return an array of task objects.
 
 #### Deleting groups
 
+## Contribution
+All contributions are very welcome as this project needs all the help we can get.
+
+If you would like to contribute, please read [this](CONTRIBUTING.md) first.
