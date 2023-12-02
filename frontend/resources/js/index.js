@@ -599,22 +599,6 @@ function searchUsers(){
             return;
         }
         let users = data;
-        let usersDiv = document.createElement("div");
-        usersDiv.classList.add("users");
-        users.forEach(user => {
-            let userDiv = document.createElement("div");
-            userDiv.classList.add("user");
-            let name = document.createElement("h3");
-            let id = document.createElement("p");
-            let button = document.createElement("button");
-            name.textContent = user.fullName;
-            id.textContent = user.id;
-            button.textContent = "Add";
-            button.setAttribute("onclick" , `addUser("${user.email}")`);
-            userDiv.appendChild(name);
-            userDiv.appendChild(email);
-            userDiv.appendChild(button);
-            usersDiv.appendChild(userDiv);
-        });
+        alert(JSON.stringify(users))
     });
 }
