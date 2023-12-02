@@ -587,8 +587,7 @@ function searchUsers(){
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization' : 'Bearer ' + localStorage.getItem("token"),
-            'Access-Control-Allow-Origin' : '*'
+            'Authorization' : 'Bearer ' + localStorage.getItem("token")
         }
     };
     fetch(`https://masterplanner.onrender.com/users/search/${searchInput}`, fetchOptions).then(response => response.json()).then(data => {
