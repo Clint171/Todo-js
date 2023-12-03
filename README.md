@@ -86,21 +86,44 @@ To create a task, send a `POST` request to `/tasks` with the following parameter
 * `priority` - The level of importance of the task (can be `high` , `medium` , or `low`)
 * `editors` - (Optional) An array containing the Ids of users who have edit permission on the task.
 * `visibility` - Defines who can see the task (can be `public` , `private` , `editors`, or `group`)
-* `parentTask` - (Optional)
+* `parentTask` - (Optional) The task Id of the task that the task being created is a sub-task of. Omit this if not needed.
 
 #### Getting tasks
 
-To get all tasks for the currently logged in user , make a `GET` request to `/tasks`
+To get all tasks for the currently logged in user , make a `GET` request to `/tasks`.
 
-This will return an array of task objects. Note, this will only display the tasks that the user owns.
+To get pending tasks , make a `GET` request to `/tasks/pending`
+
+To get ongoing tasks , make a `GET` request to `/tasks/ongoing`
+
+To get completed tasks , make a `GET` request to `/tasks/completed`
+
+To get overdue tasks , make a `GET` request to `/tasks/overdue`
+
+All these will return an array of task objects matching the query.
+**Note :** this will only display the tasks that the user owns.
 
 #### Updating tasks
 
+To update a task, send a `PUT` request to `/tasks/{{taskId}}` where taskId is the id of the task being updated.
+
+The request body should contain a JSON object with all the fields that are to be changed.
+
+**Note :** Only the task owner and editors can update a task, or edit it.
+
 #### Deleting tasks
+
+To delete a task , send a `DELETE` request to `/tasks/{{taskId}}` where taskId is the id of the task to delete.
+
+Deleting a task will also delete all its subtasks. Deleted tasks cannot be retrieved, so be careful.
+
+**Note :** Only the task owner can delete a task.
 
 ### Groups
 
 #### Creating groups
+
+
 
 #### Getting groups
 
