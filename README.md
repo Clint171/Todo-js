@@ -77,13 +77,22 @@ fetch("https://masterplanner.onrender.com/tasks" , fetchOptions).then(data =>{
 ```
 ### Tasks
 
-To get all tasks for the currently logged in user , make a `GET` request to `/tasks`
-
-This will return an array of task objects.
-
 #### Creating tasks
 
+To create a task, send a `POST` request to `/tasks` with the following parameters in your request body :
+* `title` - The task title
+* `description` - The task description
+* `dueDate` - The due date of the task, in UTC date format (Server deals with only UTC dates for consistency)
+* `priority` - The level of importance of the task (can be `high` , `medium` , or `low`)
+* `editors` - (Optional) An array containing the Ids of users who have edit permission on the task.
+* `visibility` - Defines who can see the task (can be `public` , `private` , `editors`, or `group`)
+* `parentTask` - (Optional)
+
 #### Getting tasks
+
+To get all tasks for the currently logged in user , make a `GET` request to `/tasks`
+
+This will return an array of task objects. Note, this will only display the tasks that the user owns.
 
 #### Updating tasks
 
