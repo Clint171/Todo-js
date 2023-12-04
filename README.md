@@ -109,6 +109,8 @@ To update a task, send a `PUT` request to `/tasks/{{taskId}}` where taskId is th
 
 The request body should contain a JSON object with all the fields that are to be changed.
 
+Once the task is updated, you will receive the updated task as a response.
+
 **Note :** Only the task owner and editors can update a task, or edit it.
 
 #### Deleting tasks
