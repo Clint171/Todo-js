@@ -125,7 +125,12 @@ Deleting a task will also delete all its subtasks. Deleted tasks cannot be retri
 
 #### Creating groups
 
+To create a group, send a `POST` request to `/groups`
 
+The request body should contain the following fields:
+* `name` - The name of the group.
+* `description` - The description of the group
+* `members` - The userIds of the members of the groups.
 
 #### Getting groups
 
