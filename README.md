@@ -130,13 +130,48 @@ To create a group, send a `POST` request to `/groups`
 The request body should contain the following fields:
 * `name` - The name of the group.
 * `description` - The description of the group
-* `members` - The userIds of the members of the groups.
+* `members` - An array containing the ids of the members of the groups.
+
+The following additional fields can be specified :
+* `visibility` - A string defining visibility of the group. Accepted values : `public` , `private` , `editors` , `group`. If not specified, will default to `private`.
+* `parentGroup` - Id of the parent group of this group.
+* `joinCodeRequired` - boolean specifying if new members need a join code to join. Default is `false`.
+* `acceptJoinRequests` - boolean specifying if the group accepts joining via requests. Defaults to `false` if not specified.
+* `acceptJoinRequestsAutomatically` - boolean specifying if join requests should be accepted automatically. Defaults to `false` if unspecified.
+* `acceptJoinCode` - boolean specifying if the group accepts joining via join codes. Will default to `true` if `joinCodeRequired` is true. If not specified, will default to `false`.
+* `acceptJoinCodeAutomatically` - boolean specifying if the group should automatically add members who ask to join via join code. If not specified, will default to `false`.
+
+**Note :** The creator of the group is automatically assigned as the owner.
 
 #### Getting groups
 
+To get the groups which the current user is a part of, send a `GET` request to `/groups`.
+
+This will return an array of all groups which the user is an owner, admin, or member.
+
 #### Updating group information
 
+To edit a group's information, send a `PUT` request to `/groups/{{groupId}}` where `groupId` is the id of the group.
+
+The request body should contain all the fields to be updated.
+
+If the operation is successful, it will return the updated group.
+
+**Note :** Only the group owner and admins can edit group information.
+
+#### Adding and removing members
+
+#### Adding and removing admins
+
+#### Adding and removing parent groups
+
 #### Deleting groups
+
+To delete a group, send a `DELETE` request to `/groups/{{groupId}}` where `groupId` is the id of the group.
+
+Once successful, an email will be sent to all the group members notifying them of the group's deletion.
+
+**Note :** Only the group owner can delete a group.
 
 ## Contribution
 All contributions are very welcome as this project needs all the help we can get.
