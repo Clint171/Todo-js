@@ -2,7 +2,7 @@
 Task manager for all your needs.
 
 ~ Big improvements coming soon...
-frontend - masterplanner
+frontend - [masterplanner](https://clint171.github.io/masterplanner)
 
 View the current Todo site [here](https://clints-todo.onrender.com).
 
